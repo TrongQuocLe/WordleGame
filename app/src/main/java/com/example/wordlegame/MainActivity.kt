@@ -27,32 +27,19 @@ class MainActivity : AppCompatActivity() {
 
         val submit = findViewById<Button>(R.id.button)
         submit.setOnClickListener {
-            if (count == 1) {
-                guess1.text = guessInput.text.toString()
-                guess1Check.text = checkGuess(guessInput.text.toString(), wordToGuess)
-                count += 1
-            }
-            if (count == 2) {
+            guess1.text = guessInput.text.toString()
+            guess1Check.text = checkGuess(guessInput.text.toString().uppercase(), wordToGuess)
+            submit.setOnClickListener {
                 guess2.text = guessInput.text.toString()
-                guess2Check.text = checkGuess(guessInput.text.toString(), wordToGuess)
-                count += 1
-            }
-
-            if (count == 3) {
-                guess3.text = guessInput.text.toString()
-                guess3Check.text = checkGuess(guessInput.text.toString(), wordToGuess)
-                count += 1
-            }
-
-            if (count > 3) {
-                submit.setEnabled(false)
-                solution.text = wordToGuess
+                guess2Check.text = checkGuess(guessInput.text.toString().uppercase(), wordToGuess)
+                submit.setOnClickListener {
+                    guess3.text = guessInput.text.toString()
+                    guess3Check.text = checkGuess(guessInput.text.toString().uppercase(), wordToGuess)
+                    submit.setEnabled(false)
+                    solution.text = wordToGuess
+                }
             }
         }
-
-
-
-
     }
 
     /**
