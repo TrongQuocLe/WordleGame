@@ -6,9 +6,12 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.Window
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 
@@ -25,6 +28,13 @@ class MainActivity : AppCompatActivity() {
 //        if (guessInput.getText().toString().length < 4) {
 //            Toast.makeText(applicationContext, "Please enter 4 letter word", Toast.LENGTH_LONG).show()
 //        }
+
+        val winView = findViewById<ImageView>(R.id.winView)
+        val lossView = findViewById<ImageView>(R.id.lossView)
+        winView.setVisibility(View.GONE);
+        lossView.setVisibility(View.GONE);
+//        val scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.won)
+//        winView.startAnimation(scaleAnimation)
 
         val guess1 = findViewById<TextView>(R.id.guess1)
         val guess2 = findViewById<TextView>(R.id.guess2)
@@ -45,18 +55,20 @@ class MainActivity : AppCompatActivity() {
             guess3.text = ""
             submit.setEnabled(true)
             wordToGuess = "BBBB"
+            winView.setVisibility(View.GONE);
+            lossView.setVisibility(View.GONE);
 //            var wordToGuess = FourLetterWordList.getRandomFourLetterWord()
             submit.setOnClickListener {
                 guess1.text = guessInput.text.toString()
                 guess1Check.text = checkGuess(guessInput.text.toString().uppercase(), wordToGuess)
-                if (isWon(guess1Check)) {
+                if (isWon(guess1Check, winView)) {
                     showCustomAlertDialogBox("Won", wordToGuess)
                     gameEnd(submit)
                 }
                 submit.setOnClickListener {
                     guess2.text = guessInput.text.toString()
                     guess2Check.text = checkGuess(guessInput.text.toString().uppercase(), wordToGuess)
-                    if (isWon(guess2Check)) {
+                    if (isWon(guess2Check, winView)) {
                         gameEnd(submit)
                         showCustomAlertDialogBox("Won", wordToGuess)
                     }
@@ -65,6 +77,7 @@ class MainActivity : AppCompatActivity() {
                         guess3Check.text = checkGuess(guessInput.text.toString().uppercase(), wordToGuess)
                         gameEnd(submit)
                         showCustomAlertDialogBox("Lose", wordToGuess)
+                        lossView.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -73,14 +86,14 @@ class MainActivity : AppCompatActivity() {
         submit.setOnClickListener {
             guess1.text = guessInput.text.toString()
             guess1Check.text = checkGuess(guessInput.text.toString().uppercase(), wordToGuess)
-            if (isWon(guess1Check)) {
+            if (isWon(guess1Check, winView)) {
                 gameEnd(submit)
                 showCustomAlertDialogBox("Won", wordToGuess)
             }
             submit.setOnClickListener {
                 guess2.text = guessInput.text.toString()
                 guess2Check.text = checkGuess(guessInput.text.toString().uppercase(), wordToGuess)
-                if (isWon(guess2Check)) {
+                if (isWon(guess2Check, winView)) {
                     gameEnd(submit)
                     showCustomAlertDialogBox("Won", wordToGuess)
                 }
@@ -89,6 +102,7 @@ class MainActivity : AppCompatActivity() {
                     guess3Check.text = checkGuess(guessInput.text.toString().uppercase(), wordToGuess)
                     gameEnd(submit)
                     showCustomAlertDialogBox("Lose", wordToGuess)
+                    lossView.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -162,8 +176,9 @@ class MainActivity : AppCompatActivity() {
         builder.show()
 
     }
-    private fun isWon (guessCheck: TextView): Boolean {
+    private fun isWon (guessCheck: TextView, winView: ImageView): Boolean {
         if (guessCheck.getText() == "OOOO") {
+            winView.setVisibility(View.VISIBLE);
             return true
         }
         return false
